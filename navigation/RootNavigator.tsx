@@ -3,7 +3,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '@screens/HomeScreen';
 import NewEntry from '@screens/NewEntry';
 
-const Stack = createNativeStackNavigator();
+type RootStackParamList = {
+  Home: { calories: number | undefined };
+  NewEntry: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => {
   return (
