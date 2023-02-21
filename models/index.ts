@@ -9,3 +9,15 @@ export interface NewEntry {
     carbs: number;
   };
 }
+
+export enum LimitStatus {
+  NORMAL = 'normal',
+  ALMOST = 'almost',
+  OVER = 'over',
+}
+
+export interface User {
+  name: string;
+  calorieLimit: number;
+  calories: number;
+}
