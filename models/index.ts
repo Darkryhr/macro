@@ -18,6 +18,6 @@ export enum LimitStatus {
 
 export interface User {
   name: string;
-  calorieLimit: number;
   calories: number;
+  calorieLimit: number;
 }

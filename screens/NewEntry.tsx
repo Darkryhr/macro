@@ -1,4 +1,5 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 import { Pressable, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,32 +22,37 @@ const NewEntry = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView className='flex-1 items-center justify-center bg-gray-900 text-white'>
-      <View className='border-b border-gray-400 w-36 mb-2'>
+    // <SafeAreaView className='flex-1 items-center justify-center text-white'>
+    <LinearGradient
+      colors={['#09C6F9', '#045DE9']}
+      className='flex-1 items-center justify-center w-full'
+    >
+      <View className='border-b border-gray-50 w-36 mb-2'>
         <TextInput
           onChangeText={setCalories}
           value={calories}
           placeholder='0'
           onFocus={() => setCalories('')}
-          className='text-5xl text-center text-gray-500'
+          className='text-5xl text-center text-gray-50'
         />
       </View>
-      <Text className='text-base mb-2 text-gray-300'>Calories</Text>
-      <View className='flex flex-row absolute bottom-0'>
+      <Text className='text-lg font-light mt-1 text-gray-50'>Calories</Text>
+      <View className='flex flex-row absolute bottom-5 px-3 space-x-3'>
         <Pressable
-          className='bg-green-600 flex-1 items-center justify-center py-4'
+          className='flex-[2] items-center justify-center py-2 rounded-full bg-gray-50'
           onPress={onSubmit}
         >
-          <MaterialIcons name='done' size={30} color='#ffffff' />
+          <MaterialIcons name='done' size={40} color='#1d1d1d' />
         </Pressable>
         <Pressable
-          className='bg-red-600 flex-1 items-center justify-center py-4'
+          className='flex-[1] items-center justify-center py-2 rounded-full bg-gray-50'
           onPress={onCancel}
         >
-          <MaterialIcons name='close' size={30} color='#ffffff' />
+          <MaterialIcons name='close' size={40} color='#1d1d1d' />
         </Pressable>
       </View>
-    </SafeAreaView>
+    </LinearGradient>
+    // </SafeAreaView>
   );
 };
 

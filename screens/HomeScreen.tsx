@@ -1,5 +1,6 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -59,9 +60,13 @@ const HomeScreen = ({ route, navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView className='flex-1 items-center justify-center bg-gray-900'>
+    // <SafeAreaView className='flex-1 items-center justify-center'>
+    <LinearGradient
+      colors={['#09C6F9', '#045DE9']}
+      className='flex-1 items-center justify-center w-full'
+    >
       <Text
-        className='text-gray-100 pt-8 text-center'
+        className='text-gray-50 pt-8 text-center'
         style={{
           fontFamily: 'Teko-Bold',
           fontSize: 100,
@@ -82,15 +87,21 @@ const HomeScreen = ({ route, navigation }) => {
         </Text>
         {'\n'}Calories
       </Text>
-      <View className='border-2 border-gray-700 rounded-full m-4 absolute bg-gray-800 bottom-2'>
+      <LinearGradient
+        colors={['#ffffff', '#e4e4e4']}
+        start={{ x: 0, y: 0.5 }}
+        end={{ x: 1, y: 1 }}
+        className='rounded-full m-4 absolute bg-gray-100 bottom-2'
+      >
         <Pressable
           className='p-3'
           onPress={() => navigation.navigate('NewEntry')}
         >
-          <MaterialIcons name='add' size={40} color='#797680' />
+          <MaterialIcons name='add' size={40} color='#4c4b4d' />
         </Pressable>
-      </View>
-    </SafeAreaView>
+      </LinearGradient>
+    </LinearGradient>
+    // </SafeAreaView>
   );
 };
 
@@ -98,7 +109,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   normal: {
-    color: '#1B5299',
+    color: '#fff',
   },
   almost: {
     color: '#E89005',
