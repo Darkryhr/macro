@@ -18,7 +18,7 @@ const HomeScreen = ({ route, navigation }) => {
     if (route.params?.calories) {
       const newTotal = totalDailyCalories + parseInt(route.params?.calories);
       setTotalDailyCalories(newTotal);
-      storeData(newTotal);
+      storeData(newTotal + '');
       if (newTotal > 2000) setLimitStatus(LimitStatus.ALMOST);
       if (newTotal > 2600) setLimitStatus(LimitStatus.OVER);
       route.params.calories = 0;
@@ -27,17 +27,27 @@ const HomeScreen = ({ route, navigation }) => {
 
   //* updates values on midnight
   useEffect(() => {
-    const currentMidnight = new Date().setHours(0, 0, 0, 0);
-    const interval = setInterval(() => {
-      const newMidnight = new Date().setHours(0, 0, 0, 0);
-      if (newMidnight !== currentMidnight) {
+    const checkDay = async () => {
+      const currentMidnight = new Date().setHours(0, 0, 0, 0);
+      const jsonMidnight = JSON.stringify(currentMidnight);
+      let storedDay = await AsyncStorage.getItem('@day_Key');
+      if (storedDay !== null) {
+        if (storedDay !== jsonMidnight) {
+          setTotalDailyCalories(0);
+          setLimitStatus(LimitStatus.NORMAL);
+          await storeData('0');
+          await AsyncStorage.setItem('@day_Key', jsonMidnight);
+        }
+      } else {
         setTotalDailyCalories(0);
         setLimitStatus(LimitStatus.NORMAL);
-        storeData(0);
+        await storeData('0');
+        await AsyncStorage.setItem('@day_Key', jsonMidnight);
       }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+    };
+
+    checkDay();
+  });
 
   //* updates values based on local storage
   useEffect(() => {
@@ -50,7 +60,7 @@ const HomeScreen = ({ route, navigation }) => {
           if (+value > 2600) setLimitStatus(LimitStatus.OVER);
         } else {
           setTotalDailyCalories(0);
-          storeData(0);
+          await storeData('0');
         }
       } catch (e) {
         // error reading value
@@ -115,15 +125,15 @@ const styles = StyleSheet.create({
     color: '#E89005',
   },
   over: {
-    color: '#ef233c',
+    color: '#000000',
   },
 });
 
 //* to create the daily run, store 1 key value pair locally, delete and create new one? - maybe create another value called lastAccesed, if the current time is past midnight, and lastAccesed is before, reset the main key-value pair
 
-const storeData = async (value: number) => {
+const storeData = async (value: string) => {
   try {
-    await AsyncStorage.setItem('@calories_Key', value + '');
+    await AsyncStorage.setItem('@calories_Key', value);
   } catch (e) {
     // saving error
   }

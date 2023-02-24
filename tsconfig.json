@@ -4,6 +4,7 @@
     "strict": true,
     "noImplicitAny": false,
     "baseUrl": ".",
+    "strictNullChecks": false,
     "paths": {
       "@components/*": ["components/*"],
       "@screens/*": ["screens/*"],
