@@ -21,3 +21,8 @@ export interface User {
   calories: number;
   calorieLimit: number;
 }
+
+export interface CalorieContext {
+  calorieLimit: number;
+  setDailyLimit: (number) => void;
+}

@@ -9,6 +9,7 @@
       "@components/*": ["components/*"],
       "@screens/*": ["screens/*"],
       "@navigation/*": ["navigation/*"],
+      "@utils/*": ["utils/*"],
       "@models/*": ["models/*"]
     }
   }

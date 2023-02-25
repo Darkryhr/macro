@@ -3,15 +3,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { LimitStatus } from '@models/index';
+import { useUserData } from '@utils/useProvideUser';
 
 const HomeScreen = ({ route, navigation }) => {
   const [totalDailyCalories, setTotalDailyCalories] = useState(0);
   const [limitStatus, setLimitStatus] = useState<LimitStatus>(
     LimitStatus.NORMAL
   );
+  const userData = useUserData();
 
   //* updates values on new entry
   useEffect(() => {
@@ -68,6 +69,9 @@ const HomeScreen = ({ route, navigation }) => {
     };
     getData();
   }, []);
+
+  //TODO: convert to splash screen or something
+  if (!userData) return <Text>Loading...</Text>;
 
   return (
     // <SafeAreaView className='flex-1 items-center justify-center'>

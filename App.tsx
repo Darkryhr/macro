@@ -1,5 +1,6 @@
 import RootNavigator from '@navigation/RootNavigator';
 import { NavigationContainer } from '@react-navigation/native';
+import { DataProvider } from '@utils/useProvideUser';
 import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -13,10 +14,12 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <RootNavigator />
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <DataProvider>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <RootNavigator />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </DataProvider>
   );
 }
