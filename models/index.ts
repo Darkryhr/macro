@@ -3,7 +3,7 @@ export interface NewEntry {
   time: Date;
   isFirst: boolean;
   isLast: boolean;
-  macros: {
+  macros?: {
     Protein: number;
     fat: number;
     carbs: number;

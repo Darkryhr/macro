@@ -20,8 +20,9 @@ const HomeScreen = ({ route, navigation }) => {
       const newTotal = totalDailyCalories + parseInt(route.params?.calories);
       setTotalDailyCalories(newTotal);
       storeData(newTotal + '');
-      if (newTotal > 2000) setLimitStatus(LimitStatus.ALMOST);
-      if (newTotal > 2600) setLimitStatus(LimitStatus.OVER);
+      if (newTotal > userData?.calorieLimit * 0.8)
+        setLimitStatus(LimitStatus.ALMOST);
+      if (newTotal > userData?.calorieLimit) setLimitStatus(LimitStatus.OVER);
       route.params.calories = 0;
     }
   }, [route.params?.calories, totalDailyCalories]);
@@ -57,8 +58,9 @@ const HomeScreen = ({ route, navigation }) => {
         const value = await AsyncStorage.getItem('@calories_Key');
         if (value !== null) {
           setTotalDailyCalories(+value);
-          if (+value > 2000) setLimitStatus(LimitStatus.ALMOST);
-          if (+value > 2600) setLimitStatus(LimitStatus.OVER);
+          if (+value > userData?.calorieLimit * 0.8)
+            setLimitStatus(LimitStatus.ALMOST);
+          if (+value > userData?.calorieLimit) setLimitStatus(LimitStatus.OVER);
         } else {
           setTotalDailyCalories(0);
           await storeData('0');
@@ -74,20 +76,11 @@ const HomeScreen = ({ route, navigation }) => {
   if (!userData) return <Text>Loading...</Text>;
 
   return (
-    // <SafeAreaView className='flex-1 items-center justify-center'>
     <LinearGradient
-      colors={['#09C6F9', '#045DE9']}
+      colors={['#16161d', '#100c08']}
       className='flex-1 items-center justify-center w-full'
     >
-      <Text
-        className='text-gray-50 pt-8 text-center'
-        style={{
-          fontFamily: 'Teko-Bold',
-          fontSize: 100,
-          lineHeight: 80,
-          flexWrap: 'wrap',
-        }}
-      >
+      <View className='flex-1 justify-center items-center'>
         <Text
           style={[
             limitStatus === LimitStatus.NORMAL
@@ -95,27 +88,40 @@ const HomeScreen = ({ route, navigation }) => {
               : limitStatus === LimitStatus.ALMOST
               ? styles.almost
               : limitStatus === LimitStatus.OVER && styles.over,
+            styles.heading,
           ]}
         >
           {totalDailyCalories}
         </Text>
-        {'\n'}Calories
-      </Text>
-      <LinearGradient
-        colors={['#ffffff', '#e4e4e4']}
-        start={{ x: 0, y: 0.5 }}
-        end={{ x: 1, y: 1 }}
-        className='rounded-full m-4 absolute bg-gray-100 bottom-2'
-      >
+        <Text
+          className='tracking-widest text-xl text-gray-50'
+          style={{
+            fontFamily: 'JosefinSans-Medium',
+          }}
+        >
+          CALORIES
+        </Text>
+      </View>
+      <View className='rounded-full m-4 absolute bottom-4 border-2 border-gray-500'>
         <Pressable
           className='p-3'
           onPress={() => navigation.navigate('NewEntry')}
         >
-          <MaterialIcons name='add' size={40} color='#4c4b4d' />
+          <MaterialIcons name='add' size={50} color='#f7f7f7' />
         </Pressable>
-      </LinearGradient>
+      </View>
+      {/* quick cache clear */}
+      <View className='rounded-full m-4 absolute bottom-40 border-2 border-gray-500'>
+        <Pressable
+          className='p-3'
+          onPress={async () => {
+            await AsyncStorage.clear();
+          }}
+        >
+          <MaterialIcons name='close' size={50} color='#f7f7f7' />
+        </Pressable>
+      </View>
     </LinearGradient>
-    // </SafeAreaView>
   );
 };
 
@@ -126,10 +132,14 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   almost: {
-    color: '#E89005',
+    color: '#F1A208',
   },
   over: {
-    color: '#000000',
+    color: '#F0544F',
+  },
+  heading: {
+    fontSize: 100,
+    fontFamily: 'JosefinSans-Bold',
   },
 });
 

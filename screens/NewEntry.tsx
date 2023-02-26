@@ -24,31 +24,45 @@ const NewEntry = ({ navigation }) => {
   return (
     // <SafeAreaView className='flex-1 items-center justify-center text-white'>
     <LinearGradient
-      colors={['#09C6F9', '#045DE9']}
+      colors={['#16161d', '#100c08']}
       className='flex-1 items-center justify-center w-full'
     >
-      <View className='border-b border-gray-50 w-36 mb-2'>
+      <View className='w-full mb-2'>
         <TextInput
           onChangeText={setCalories}
           value={calories}
           placeholder='0'
           onFocus={() => setCalories('')}
-          className='text-5xl text-center text-gray-50'
+          underlineColorAndroid='transparent'
+          autoComplete='off'
+          autoCorrect={false}
+          className='text-8xl text-center text-gray-50 leading-none w-full'
+          style={{
+            fontFamily: 'JosefinSans-Medium',
+          }}
         />
+        <View className='h-[2px] bg-white w-56 mx-auto mb-2' />
       </View>
-      <Text className='text-lg font-light mt-1 text-gray-50'>Calories</Text>
+      <Text
+        className='text-3xl font-light mt-2 text-gray-50'
+        style={{
+          fontFamily: 'JosefinSans-Light',
+        }}
+      >
+        Calories
+      </Text>
       <View className='flex flex-row absolute bottom-5 px-3 space-x-3'>
         <Pressable
-          className='flex-[2] items-center justify-center py-2 rounded-full bg-gray-50'
+          className='flex-[2] items-center justify-center py-2 rounded-full bg-gray-100'
           onPress={onSubmit}
         >
-          <MaterialIcons name='done' size={40} color='#1d1d1d' />
+          <MaterialIcons name='done' size={40} color='#808000' />
         </Pressable>
         <Pressable
-          className='flex-[1] items-center justify-center py-2 rounded-full bg-gray-50'
+          className='flex-[1] items-center justify-center py-2 rounded-full bg-gray-300'
           onPress={onCancel}
         >
-          <MaterialIcons name='close' size={40} color='#1d1d1d' />
+          <MaterialIcons name='close' size={40} color='#e32636' />
         </Pressable>
       </View>
     </LinearGradient>
