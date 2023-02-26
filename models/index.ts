@@ -1,13 +1,11 @@
+export interface Macros {
+  Protein: number;
+  fat: number;
+  carbs: number;
+}
 export interface NewEntry {
   calories: number;
-  time: Date;
-  isFirst: boolean;
-  isLast: boolean;
-  macros?: {
-    Protein: number;
-    fat: number;
-    carbs: number;
-  };
+  macros?: Macros;
 }
 
 export enum LimitStatus {
@@ -25,4 +23,5 @@ export interface User {
 export interface CalorieContext {
   calorieLimit: number;
   setDailyLimit: (number) => void;
+  setMacros: (string) => void;
 }
