@@ -7,73 +7,23 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { LimitStatus } from '@models/index';
 import { useUserData } from '@utils/useProvideUser';
 
-const HomeScreen = ({ route, navigation }) => {
-  const [totalDailyCalories, setTotalDailyCalories] = useState(0);
+const HomeScreen = ({ navigation }) => {
   const [limitStatus, setLimitStatus] = useState<LimitStatus>(
     LimitStatus.NORMAL
   );
   const userData = useUserData();
 
-  //* updates values on new entry
-  useEffect(() => {
-    if (route.params?.calories) {
-      const newTotal = totalDailyCalories + parseInt(route.params?.calories);
-      setTotalDailyCalories(newTotal);
-      storeData(newTotal + '');
-      if (newTotal > userData?.calorieLimit * 0.8)
-        setLimitStatus(LimitStatus.ALMOST);
-      if (newTotal > userData?.calorieLimit) setLimitStatus(LimitStatus.OVER);
-      route.params.calories = 0;
-    }
-  }, [route.params?.calories, totalDailyCalories]);
-
-  //* updates values on midnight
-  useEffect(() => {
-    const checkDay = async () => {
-      const currentMidnight = new Date().setHours(0, 0, 0, 0);
-      const jsonMidnight = JSON.stringify(currentMidnight);
-      let storedDay = await AsyncStorage.getItem('@day_Key');
-      if (storedDay !== null) {
-        if (storedDay !== jsonMidnight) {
-          setTotalDailyCalories(0);
-          setLimitStatus(LimitStatus.NORMAL);
-          await storeData('0');
-          await AsyncStorage.setItem('@day_Key', jsonMidnight);
-        }
-      } else {
-        setTotalDailyCalories(0);
-        setLimitStatus(LimitStatus.NORMAL);
-        await storeData('0');
-        await AsyncStorage.setItem('@day_Key', jsonMidnight);
-      }
-    };
-
-    checkDay();
-  });
-
-  //* updates values based on local storage
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const value = await AsyncStorage.getItem('@calories_Key');
-        if (value !== null) {
-          setTotalDailyCalories(+value);
-          if (+value > userData?.calorieLimit * 0.8)
-            setLimitStatus(LimitStatus.ALMOST);
-          if (+value > userData?.calorieLimit) setLimitStatus(LimitStatus.OVER);
-        } else {
-          setTotalDailyCalories(0);
-          await storeData('0');
-        }
-      } catch (e) {
-        // error reading value
-      }
-    };
-    getData();
-  }, []);
-
   //TODO: convert to splash screen or something
   if (!userData) return <Text>Loading...</Text>;
+
+  useEffect(() => {
+    if (userData.dailyMacros.calories > userData.calorieLimit * 0.8) {
+      setLimitStatus(LimitStatus.ALMOST);
+    }
+    if (userData.dailyMacros.calories > userData.calorieLimit) {
+      setLimitStatus(LimitStatus.OVER);
+    }
+  });
 
   return (
     <LinearGradient
@@ -91,16 +41,27 @@ const HomeScreen = ({ route, navigation }) => {
             styles.heading,
           ]}
         >
-          {totalDailyCalories}
+          {userData.dailyMacros?.calories}
         </Text>
         <Text
-          className='tracking-widest text-xl text-gray-50'
+          className='tracking-widest text-lg text-gray-100'
           style={{
             fontFamily: 'JosefinSans-Medium',
           }}
         >
           CALORIES
         </Text>
+        {userData.dailyMacros?.macros !== undefined ? (
+          <>
+            {Object.keys(userData.dailyMacros?.macros).map((key, index) => (
+              <MacroVisualiser
+                key={key}
+                macroKey={key}
+                macroValue={userData.dailyMacros?.macros[key]}
+              />
+            ))}
+          </>
+        ) : null}
       </View>
       <View className='rounded-full m-4 absolute bottom-4 border-2 border-gray-500'>
         <Pressable
@@ -111,7 +72,7 @@ const HomeScreen = ({ route, navigation }) => {
         </Pressable>
       </View>
       {/* quick cache clear */}
-      <View className='rounded-full m-4 absolute bottom-40 border-2 border-gray-500'>
+      {/* <View className='rounded-full m-4 absolute bottom-40 border-2 border-gray-500'>
         <Pressable
           className='p-3'
           onPress={async () => {
@@ -120,7 +81,7 @@ const HomeScreen = ({ route, navigation }) => {
         >
           <MaterialIcons name='close' size={50} color='#f7f7f7' />
         </Pressable>
-      </View>
+      </View> */}
     </LinearGradient>
   );
 };
@@ -151,4 +112,16 @@ const storeData = async (value: string) => {
   } catch (e) {
     // saving error
   }
+};
+
+const MacroVisualiser = ({ macroKey, macroValue }) => {
+  return (
+    <View className='opacity-70 mt-3'>
+      <View className='h-[1px] bg-gray-100 w-16 mx-auto mb-3 mt-2'></View>
+      <Text className='text-gray-50 font-light text-base'>
+        <Text className='font-bold'>{macroValue}g </Text>
+        of {macroKey}
+      </Text>
+    </View>
+  );
 };

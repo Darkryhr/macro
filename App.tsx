@@ -1,5 +1,6 @@
 import RootNavigator from '@navigation/RootNavigator';
 import { NavigationContainer } from '@react-navigation/native';
+import { MacroProvider } from '@utils/useMacros';
 import { DataProvider } from '@utils/useProvideUser';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
@@ -18,12 +19,14 @@ export default function App() {
 
   return (
     <DataProvider>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <RootNavigator />
-          <StatusBar style='auto' />
-        </NavigationContainer>
-      </SafeAreaProvider>
+      <MacroProvider>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <RootNavigator />
+            <StatusBar style='auto' />
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </MacroProvider>
     </DataProvider>
   );
 }

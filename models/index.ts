@@ -1,7 +1,7 @@
 export interface Macros {
-  Protein: number;
-  fat: number;
-  carbs: number;
+  protein?: number;
+  fat?: number;
+  carbs?: number;
 }
 export interface NewEntry {
   calories: number;
@@ -22,6 +22,18 @@ export interface User {
 
 export interface CalorieContext {
   calorieLimit: number;
+  dailyMacros: NewEntry;
   setDailyLimit: (number) => void;
-  setMacros: (string) => void;
+  // setMacros: (string) => void;
+  createDailyTrackingObj: (macros: string[]) => void;
+  updateDailyMacros: (data: NewEntry) => void;
+}
+
+export interface MacroContext {
+  protein: string;
+  carbs: string;
+  fat: string;
+  setProtein: (string) => void;
+  setCarbs: (string) => void;
+  setFat: (string) => void;
 }

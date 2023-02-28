@@ -4,24 +4,21 @@ import Checkbox from 'expo-checkbox';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useState } from 'react';
 import { Pressable, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
-const InitialSetup = ({ navigation }) => {
-  //* here the user will define his maintenance calories, type of goal, and later if additional macros should be recorded
-
+const InitialSetup = () => {
   const [calorieLimit, setCalorieLimit] = useState('0');
   const [advancedSettings, setAdvancedSettings] = useState(false);
-  const { setDailyLimit, setMacros } = useUserData();
+  const { setDailyLimit, createDailyTrackingObj } = useUserData();
   const [proteinChecked, setProteinChecked] = useState(false);
   const [carbsChecked, setCarbsChecked] = useState(false);
   const [fatChecked, setFatChecked] = useState(false);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const macros: string[] = [];
     if (proteinChecked) macros.push('protein');
     if (carbsChecked) macros.push('carbs');
     if (fatChecked) macros.push('fat');
-    setMacros(macros);
+    await createDailyTrackingObj(macros);
     setDailyLimit(+calorieLimit);
   };
 
@@ -43,6 +40,7 @@ const InitialSetup = ({ navigation }) => {
       </Text>
       <View className='border-b border-gray-400 w-36 my-4'>
         <TextInput
+          keyboardType='numeric'
           onChangeText={setCalorieLimit}
           value={calorieLimit}
           placeholder='0'
