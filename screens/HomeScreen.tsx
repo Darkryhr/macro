@@ -5,22 +5,19 @@ import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { LimitStatus } from '@models/index';
-import { useUserData } from '@utils/useProvideUser';
+import { useTrackerData } from '@utils/useProvideTracker';
 
 const HomeScreen = ({ navigation }) => {
   const [limitStatus, setLimitStatus] = useState<LimitStatus>(
     LimitStatus.NORMAL
   );
-  const userData = useUserData();
+  const { controlObj, dailyObj } = useTrackerData();
 
   //TODO: convert to splash screen or something
-  if (!userData) return <Text>Loading...</Text>;
+  if (!dailyObj) return <Text>Loading...</Text>;
 
   useEffect(() => {
-    if (userData.dailyMacros.calories > userData.calorieLimit * 0.8) {
-      setLimitStatus(LimitStatus.ALMOST);
-    }
-    if (userData.dailyMacros.calories > userData.calorieLimit) {
+    if (dailyObj.calories > controlObj.calories) {
       setLimitStatus(LimitStatus.OVER);
     }
   });
@@ -35,13 +32,13 @@ const HomeScreen = ({ navigation }) => {
           style={[
             limitStatus === LimitStatus.NORMAL
               ? styles.normal
-              : limitStatus === LimitStatus.ALMOST
-              ? styles.almost
-              : limitStatus === LimitStatus.OVER && styles.over,
+              : // : limitStatus === LimitStatus.ALMOST
+                // ? styles.almost
+                limitStatus === LimitStatus.OVER && styles.over,
             styles.heading,
           ]}
         >
-          {userData.dailyMacros?.calories}
+          {dailyObj?.calories}
         </Text>
         <Text
           className='tracking-widest text-lg text-gray-100'
@@ -51,13 +48,13 @@ const HomeScreen = ({ navigation }) => {
         >
           CALORIES
         </Text>
-        {userData.dailyMacros?.macros !== undefined ? (
+        {dailyObj?.macros !== undefined ? (
           <>
-            {Object.keys(userData.dailyMacros?.macros).map((key, index) => (
+            {Object.keys(dailyObj?.macros).map((key, index) => (
               <MacroVisualiser
                 key={key}
                 macroKey={key}
-                macroValue={userData.dailyMacros?.macros[key]}
+                macroValue={dailyObj?.macros[key]}
               />
             ))}
           </>
@@ -72,7 +69,7 @@ const HomeScreen = ({ navigation }) => {
         </Pressable>
       </View>
       {/* quick cache clear */}
-      {/* <View className='rounded-full m-4 absolute bottom-40 border-2 border-gray-500'>
+      <View className='rounded-full m-4 absolute bottom-40 border-2 border-gray-500'>
         <Pressable
           className='p-3'
           onPress={async () => {
@@ -81,7 +78,7 @@ const HomeScreen = ({ navigation }) => {
         >
           <MaterialIcons name='close' size={50} color='#f7f7f7' />
         </Pressable>
-      </View> */}
+      </View>
     </LinearGradient>
   );
 };

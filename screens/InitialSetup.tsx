@@ -12,6 +12,7 @@ const InitialSetup = () => {
   const [proteinChecked, setProteinChecked] = useState(false);
   const [carbsChecked, setCarbsChecked] = useState(false);
   const [fatChecked, setFatChecked] = useState(false);
+  const [IFChecked, setIFChecked] = useState(false);
 
   const onSubmit = async () => {
     const macros: string[] = [];
@@ -111,6 +112,16 @@ const InitialSetup = () => {
               }`}
               editable={fatChecked}
             />
+          </View>
+          <View>
+            <Checkbox
+              value={IFChecked}
+              onValueChange={setIFChecked}
+              className='mr-2 rounded-xl'
+            />
+            <Text className='text-gray-200'>
+              Intermittent Fasting: record time
+            </Text>
           </View>
         </View>
       )}

@@ -9,30 +9,17 @@ export const useUserData = () => useContext(calorieContext);
 
 function useProvideUser() {
   const [calorieLimit, setCalorieLimit] = useState(0);
+  const [controlObj, setControlObj] = useState({});
 
   const [dailyMacros, setDailyMacros] = useState<NewEntry>({
     calories: 0,
   });
 
-  //* sets up initial user goal tracking object
-  const createDailyTrackingObj = async (macros: string[]) => {
-    //* set macros
-    const userGoals = appendMacros(macros);
-    //* save obj to storage
-    const jsonValue = JSON.stringify(userGoals);
+  const createControlObj = async userPrefObj => {
+    setControlObj(userPrefObj);
+    const jsonValue = JSON.stringify(controlObj);
     await AsyncStorage.setItem('@userGoalTracker_Key', jsonValue);
     await AsyncStorage.setItem('@trackedGoals_Key', jsonValue);
-    //* save obj to state
-    setDailyMacros(userGoals);
-  };
-
-  const appendMacros = (macros: string[]): NewEntry => {
-    let macroObject = {};
-    macros.forEach(macro => {
-      macroObject[macro] = 0;
-    });
-    const dailyMacroObj = { calories: 0, macros: macroObject };
-    return dailyMacroObj;
   };
 
   const setDailyLimit = async (data: number) => {
@@ -65,6 +52,7 @@ function useProvideUser() {
     checkStorage();
   }, []);
 
+  //* on refresh
   useEffect(() => {
     const getData = async () => {
       try {
@@ -109,7 +97,7 @@ function useProvideUser() {
     calorieLimit,
     setDailyLimit,
     updateDailyMacros,
-    createDailyTrackingObj,
+    createControlObj,
   };
 }
 

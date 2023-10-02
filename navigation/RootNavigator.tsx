@@ -1,14 +1,15 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import HomeScreen from '@screens/HomeScreen';
-import InitialSetup from '@screens/InitialSetup';
 import NewEntry from '@screens/NewEntry';
 import { useUserData } from '@utils/useProvideUser';
+import { TabNavigator } from './InitialSetupNavigator';
 
 type RootStackParamList = {
   Home: { calories: number | undefined; calorieLimit: number };
   NewEntry: undefined;
   InitialSetup: undefined;
+  Test: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -28,7 +29,8 @@ const RootNavigator = () => {
           <Stack.Screen name='NewEntry' component={NewEntry} />
         </>
       ) : (
-        <Stack.Screen name='InitialSetup' component={InitialSetup} />
+        // <Stack.Screen name='InitialSetup' component={InitialSetup} />
+        <Stack.Screen name='InitialSetup' component={TabNavigator} />
       )}
     </Stack.Navigator>
   );
